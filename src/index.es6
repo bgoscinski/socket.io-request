@@ -42,7 +42,8 @@ class SocketIORequest{
   response(method, callback){
     if(typeof method !== "string") throw new Error('argument "method" is missing');
     if(typeof callback !== "function") throw new Error('"callback" must be a function');
-    this.io.on(this.options.event, (req, ack) => {
+
+    const listener = (req, ack) => {
       if(req.method !== method) return;
       const res = function(data){
         ack({data});
@@ -51,7 +52,12 @@ class SocketIORequest{
         ack({error: convertErrorToObject(err)});
       };
       callback(req.data, res);
-    });
+    };
+
+    this.io.on(this.options.event, listener);
+    return () => {
+      this.io.removeListener(this.options.event, listener);
+    };
   }
 
 }

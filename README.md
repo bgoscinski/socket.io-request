@@ -23,7 +23,7 @@ Of cource, Socket.IO's `emit` and `on` have request-response. This library adds 
 ## Methods
 
 - `request("method", data)` return `Promise`
-- `response("method", handler)`
+- `response("method", handler)` return `function` which deregisters handler when called
 
 
 ## Usage
